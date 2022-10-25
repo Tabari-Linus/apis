@@ -12,6 +12,8 @@ def api_home(request, *args, **kwargs):
         pass
     print(data)
     # data['headers'] = request.headers
+    data['params']= dict(request.GET)
+    data['headers'] = dict(request.headers)
     print(request.headers)
     data['content_type'] = request.content_type
     return JsonResponse(data)
