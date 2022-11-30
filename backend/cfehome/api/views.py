@@ -1,19 +1,18 @@
-import json
-from django.http import JsonResponse
+# from django.forms.models import model_to_dict
+from products.models import Product
+from products.serializers import ProductSerializer
 
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+
+@api_view(["GET"])
 def api_home(request, *args, **kwargs):
-    # request > is Httprequest > Django
-    #  request.body
-    body = request.body # byte string of JSON data
+    """
+    Django Rest Frameworks API View
+    """
+    instance = Product.objects.all().order_by("?").first()
     data = {}
-    try:
-        data = json.loads(body)
-    except:
-        pass
-    print(data)
-    # data['headers'] = request.headers
-    data['params']= dict(request.GET)
-    data['headers'] = dict(request.headers)
-    print(request.headers)
-    data['content_type'] = request.content_type
-    return JsonResponse(data)
+    if instance:
+        # data = model_to_dict(model_data, fields=['id', 'title', 'price', 'sale_price'])
+        data = ProductSerializer(instance).data
+    return Response(data)
